@@ -1,3 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/poalim_kafka
+    username: c123user
+    password: c123456789
 generator:
   employee:
     hire_date:  # hired before $(random between min and max) days
