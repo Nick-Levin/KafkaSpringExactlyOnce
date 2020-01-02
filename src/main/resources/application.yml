@@ -6,6 +6,7 @@ spring:
     url: jdbc:mysql://localhost:3306/poalim_kafka
     username: c123user
     password: c123456789
+
 generator:
   employee:
     hire_date:  # hired before $(random between min and max) days
@@ -15,5 +16,5 @@ generator:
       min: 1
       max: 10
     salary:     # has salary between min and max
-      min: 10000.0
-      max: 50000.0
+      min: 10000
+      max: 50000

@@ -21,8 +21,8 @@ public class KafkaSpringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		final Map<String, Object> emp = employeeGenerator.generate();
-		System.out.println(emp);
+//		final Map<String, Object> emp = employeeGenerator.generate();
+//		System.out.println(emp);
 
 	}
 }
