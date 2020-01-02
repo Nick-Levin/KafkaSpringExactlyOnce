@@ -18,11 +18,11 @@ import javax.persistence.Table;
 public class Counter {
 
     @Id
-    @Column(name="entity_name")
+    @Column(name="entity_name", nullable=false, unique=true)
     private String entityName;
 
     @NotNull
-    @Column(name="last_id")
+    @Column(name="last_id", nullable=false)
     private long lastId;
 
 }
