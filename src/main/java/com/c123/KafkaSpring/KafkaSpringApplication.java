@@ -23,7 +23,7 @@ public class KafkaSpringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		employeeGenerator.generateList(50).forEach(emp -> logger.debug(emp.toString()));
+		employeeGenerator.generateList(10).forEach(emp -> logger.debug(emp.toString()));
 
 	}
 }

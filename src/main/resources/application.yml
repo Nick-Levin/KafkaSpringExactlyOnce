@@ -1,4 +1,7 @@
 spring:
+  output:
+    ansi:
+      enabled: ALWAYS
   jpa:
     show-sql: true
     hibernate:
@@ -21,9 +24,17 @@ spring:
 logging:
   level:
     root: WARN
-    com.c123.KafkaSpring: DEBUG
-    org.springframework: DEBUG
-    org.hibernate: DEBUG
+    com.c123.KafkaSpring: INFO
+    org.springframework: INFO
+    org.hibernate: INFO
+  pattern:
+    console: "%green(%d) %highlight(%5p) %magenta([%t]) %cyan(%logger{36}.%M) - %msg%n"
+    file:    "%d %5p [%t] %logger.%M - %msg%n"
+    dateformat: "yyyy-MM-dd HH:mm:ss.SSS"
+  file:
+    name: log/app.log
+    max-size: 10MB
+    max-history: 30
 
 generator:
   counter_row_name: employees
