@@ -18,6 +18,13 @@ spring:
     username: c123user
     password: c123456789
 
+logging:
+  level:
+    root: WARN
+    com.c123.KafkaSpring: DEBUG
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+
 generator:
   counter_row_name: employees
   employee:

@@ -1,6 +1,7 @@
 package com.c123.KafkaSpring;
 
 import com.c123.KafkaSpring.service.EmployeeGenerator;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,9 @@ public class KafkaSpringApplication implements CommandLineRunner {
 	@Autowired
 	EmployeeGenerator employeeGenerator;
 
+	@Autowired
+	Logger logger;
+
 	public static void main(String ...args) {
 		SpringApplication.run(KafkaSpringApplication.class, args);
 	}
@@ -19,7 +23,7 @@ public class KafkaSpringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		employeeGenerator.generateList(50).forEach(System.out::println);
+		employeeGenerator.generateList(50).forEach(emp -> logger.debug(emp.toString()));
 
 	}
 }
