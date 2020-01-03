@@ -5,13 +5,15 @@ import com.c123.KafkaSpring.repository.CounterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class EmployeeGeneratorImpl implements EmployeeGenerator {
@@ -20,29 +22,32 @@ public class EmployeeGeneratorImpl implements EmployeeGenerator {
     CounterRepository counterRepository;
 
     @Value("${generator.employee.hire_date.min}")
-    int hireDateMin;
+    private int hireDateMin;
 
     @Value("${generator.employee.hire_date.max}")
-    int hireDateMax;
+    private int hireDateMax;
 
     @Value("${generator.employee.dept_id.min}")
-    int deptIdMin;
+    private int deptIdMin;
 
     @Value("${generator.employee.dept_id.max}")
-    int deptIdMax;
+    private int deptIdMax;
 
     @Value("${generator.employee.salary.min}")
-    int salaryMin;
+    private int salaryMin;
 
     @Value("${generator.employee.salary.max}")
-    int salaryMax;
+    private int salaryMax;
+
+    @Value("${generator.counter_row_name}")
+    private String counterRowName;
 
     private Random random = new Random();
 
     @PostConstruct
     public void init(){
-        if(!counterRepository.findById("employees").isPresent()) {
-            counterRepository.save(new Counter("employees", 1));
+        if(!counterRepository.findById(counterRowName).isPresent()) {
+            counterRepository.save(new Counter(counterRowName, 1));
         }
     }
 
@@ -58,10 +63,20 @@ public class EmployeeGeneratorImpl implements EmployeeGenerator {
         return employee;
     }
 
-    public long getId() {
-        return counterRepository.findById("employees").orElseGet(() -> {
+    @Override
+    public List<Map<String, Object>> generateList(int length) {
+        List<Map<String, Object>> list = new ArrayList<>(length);
+        for (int i = 0; i < length; i++) list.add(generate());
+        return list;
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    private long getId() {
+        Counter empCounter = counterRepository.findById(counterRowName).orElseGet(() -> {
             throw new RuntimeException("counter for employees wasn't initialized");
-        }).getLastId();
+        });
+        counterRepository.save(new Counter(empCounter.getEntityName(), empCounter.getLastId()+1));
+        return empCounter.getLastId();
     }
 
     private String getName() {
@@ -74,8 +89,13 @@ public class EmployeeGeneratorImpl implements EmployeeGenerator {
     }
 
     private double getSalary() {
-        int salary = random.nextInt(salaryMax - salaryMin) + salaryMin;
-        return salary == salaryMax ? salary : salary + random.nextDouble();
+        int intSalary = random.nextInt(salaryMax - salaryMin) + salaryMin;
+        return new BigDecimal(
+                intSalary == salaryMax ?
+                intSalary :
+                intSalary + random.nextDouble())
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 
     private long getDeptId() {
@@ -83,15 +103,22 @@ public class EmployeeGeneratorImpl implements EmployeeGenerator {
     }
 
     private static class GeneratorConstants {
-        private static String[] names = {"Nick", "Eyal", "Regev"};
-        private static Random random = new Random();
+        private static final String[] NAMES = {
+                "Christina","Aiko", "Gus", "Lina", "Tammie","Tiffany", "Mariel","Mavis","Alease","Aisha",
+                "Lavern","Shaunte","Wendie","Cyrus","America","Marcy","Vasiliki","Marie","Kira",
+                "Lynnette","Vernon","Janette","Gale","Brunilda","Sharda","Weldon","Delta","Thomas",
+                "Barabara","Svetlana","Dierdre","Lani","Phylis","Peggie","Lavenia","Clement","Nicolasa",
+                "Carisa","Emilee","Shawnee","Londa","Jacqulyn","Paola","Emmie","Denis","Chastity",
+                "Fritz","Waneta","Claretta","Mervin"
+        };
+        private static final Random RANDOM = new Random();
 
-        public static String getName() {
-            return names[random.nextInt(names.length)];
+        private static String getName() {
+            return NAMES[RANDOM.nextInt(NAMES.length)];
         }
 
-        public static String getName(int index) {
-            return names[index];
+        private static String getName(int index) {
+            return NAMES[index];
         }
     }
 

@@ -1,6 +1,5 @@
 package com.c123.KafkaSpring.entity;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,6 @@ public class Counter {
     @Column(name="entity_name", nullable=false, unique=true)
     private String entityName;
 
-    @NotNull
     @Column(name="last_id", nullable=false)
     private long lastId;
 

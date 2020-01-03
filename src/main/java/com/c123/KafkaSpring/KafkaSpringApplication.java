@@ -6,8 +6,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Map;
-
 @SpringBootApplication
 public class KafkaSpringApplication implements CommandLineRunner {
 
@@ -21,8 +19,7 @@ public class KafkaSpringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-//		final Map<String, Object> emp = employeeGenerator.generate();
-//		System.out.println(emp);
+		employeeGenerator.generateList(50).forEach(System.out::println);
 
 	}
 }

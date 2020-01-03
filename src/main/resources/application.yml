@@ -1,13 +1,25 @@
 spring:
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          batch_size: 10
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        generate_statistics: true
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/poalim_kafka
     username: c123user
     password: c123456789
 
 generator:
+  counter_row_name: employees
   employee:
     hire_date:  # hired before $(random between min and max) days
       min: 0
