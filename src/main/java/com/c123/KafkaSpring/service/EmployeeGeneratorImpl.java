@@ -1,14 +1,9 @@
 package com.c123.KafkaSpring.service;
 
-import com.c123.KafkaSpring.entity.Counter;
-import com.c123.KafkaSpring.repository.CounterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
@@ -19,7 +14,7 @@ import java.util.*;
 public class EmployeeGeneratorImpl implements EmployeeGenerator {
 
     @Autowired
-    CounterRepository counterRepository;
+    SequenceService sequenceService;
 
     @Value("${generator.employee.hire_date.min}")
     private int hireDateMin;
@@ -39,17 +34,10 @@ public class EmployeeGeneratorImpl implements EmployeeGenerator {
     @Value("${generator.employee.salary.max}")
     private int salaryMax;
 
-    @Value("${generator.counter_row_name}")
-    private String counterRowName;
+    @Value("${generator.sequence_name}")
+    private String sequenceName;
 
     private Random random = new Random();
-
-    @PostConstruct
-    public void init(){
-        if(!counterRepository.findById(counterRowName).isPresent()) {
-            counterRepository.save(new Counter(counterRowName, 1));
-        }
-    }
 
     @Override
     public Map<String, Object> generate() {
@@ -70,13 +58,8 @@ public class EmployeeGeneratorImpl implements EmployeeGenerator {
         return list;
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
     private long getId() {
-        Counter empCounter = counterRepository.findById(counterRowName).orElseGet(() -> {
-            throw new RuntimeException("counter for employees wasn't initialized");
-        });
-        counterRepository.save(new Counter(empCounter.getEntityName(), empCounter.getLastId()+1));
-        return empCounter.getLastId();
+        return sequenceService.nextVal(sequenceName);
     }
 
     private String getName() {
