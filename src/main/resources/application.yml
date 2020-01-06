@@ -4,7 +4,7 @@ spring:
       enabled: ALWAYS
 
   kafka:
-    topic: employeesTopic
+    topic: c123Topic
     producer:
       bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
@@ -38,10 +38,10 @@ spring:
 logging:
   level:
     root: WARN
-    com.c123.KafkaSpring: INFO
-    org.springframework.core: INFO
-    org.springframework.kafka: INFO
-    org.hibernate: INFO
+    com.c123.KafkaSpring: WARN
+    org.springframework.core: WARN
+    org.springframework.kafka: WARN
+    org.hibernate: WARN
 
   pattern:
     console: "%green(%d) %highlight(%5p) %magenta([%t]) %cyan(%logger{36}.%M) - %msg%n"
@@ -54,9 +54,16 @@ logging:
     max-history: 30
 
 
+sequences:
+  start: 1
+  skip: 5
+  names:
+    - employee
+
+
 generator:
-  amount: 100
-  counter_row_name: employees
+  amount: 200
+  sequence_name: employee
   employee:
     hire_date:  # hired before $(random between min and max) days
       min: 0

@@ -2,7 +2,6 @@ package com.c123.KafkaSpring;
 
 import com.c123.KafkaSpring.service.EmployeeGenerator;
 import com.c123.KafkaSpring.service.Producer;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
-
-import java.util.List;
 
 @SpringBootApplication
 public class KafkaSpringApplication implements CommandLineRunner {
