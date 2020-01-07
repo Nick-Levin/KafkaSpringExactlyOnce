@@ -56,13 +56,13 @@ logging:
 
 sequences:
   start: 1
-  skip: 5
+  skip: 20
   names:
     - employee
 
 
 generator:
-  amount: 200
+  amount: 10
   sequence_name: employee
   employee:
     hire_date:  # hired before $(random between min and max) days
